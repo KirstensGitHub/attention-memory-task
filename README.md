@@ -116,11 +116,11 @@ available in this repository (stimulus_generation_code/process_images.m) and
 for recommending the stimulus sets!
 
 # References:
-Face stimuli: J. Xiao, J. Hays, K. Ehinger, A. Oliva, and A. Torralba.
+Place stimuli: J. Xiao, J. Hays, K. Ehinger, A. Oliva, and A. Torralba.
 SUN Database: Large-scale Scene Recognition from Abbey to Zoo.
 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)
 
-Place stimuli: P. Jonathon Phillips, Harry Wechsler, Jeffrey Huang, Patrick J.
+Face stimuli: P. Jonathon Phillips, Harry Wechsler, Jeffrey Huang, Patrick J.
 Rauss: The FERET database and evaluation procedure for face-recognition
 algorithms. Image Vision Comput. 16(5): 295-306 (1998)
 
