@@ -191,7 +191,7 @@ def parse_gaze_data(datadir):
         data.append(helper(subjdir))
     return pd.concat(data, ignore_index=True)
 
-# KZ edited one line in the intersect_image function
+# KZ edited three lines in the intersect_image function
 def intersect_image(xs, ys):
     
     # Instead of eliminating cases where they directly intersect the image
@@ -202,8 +202,13 @@ def intersect_image(xs, ys):
     
     y = (33.6 -im_len) 
     
-    x1 = (59.8 / 2) - 4.5 - im_len
-    x2 = (59.8 / 2) + 4.5
+    # if we are adding a 1 dva box around the images, then we need to reduce the distance from the center fixation point by 1 dva (4.5 --> 3.5)
+    
+#   x1 = (59.8 / 2) - 4.5 - im_len
+#   x2 = (59.8 / 2) + 4.5
+
+    x1 = (59.8 / 2) - 3.5 - im_len
+    x2 = (59.8 / 2) + 3.5
 
     xs = np.array(xs)
     ys = np.array(ys)
