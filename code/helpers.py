@@ -389,7 +389,7 @@ def add_cue_recency_info(df):
         df.loc[i, 'Distance to nearest same-category cue'], df.loc[i, 'Number of same-category cues'], df.loc[i, 'Recency-weighted number of same-category cues'] = nearest_cues(row, df)
     return df
 
-
+# KZ edited two lines in load_data function
 def load_data():
     download_data()
     
@@ -431,9 +431,13 @@ def load_data():
     sustained_behavioral = add_cue_recency_info(sustained_behavioral)
     variable_behavioral = add_cue_recency_info(variable_behavioral)
 
-
-    sustained = sustained_behavioral[~sustained_behavioral['Attended intersection']]
-    variable = variable_behavioral[~variable_behavioral['Attended intersection']]
+    # KZ edited these lines
+    
+    # sustained = sustained_behavioral[~sustained_behavioral['Attended intersection']]
+    # variable = variable_behavioral[~variable_behavioral['Attended intersection']]
+    
+    sustained = sustained_behavioral[~sustained_behavioral['Intersection detected']]
+    variable = variable_behavioral[~variable_behavioral['Intersection detected']]
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
