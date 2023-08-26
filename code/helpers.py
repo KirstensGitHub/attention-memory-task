@@ -191,10 +191,17 @@ def parse_gaze_data(datadir):
         data.append(helper(subjdir))
     return pd.concat(data, ignore_index=True)
 
-
+# KZ edited one line in the intersect_image function
 def intersect_image(xs, ys):
-    im_len = 6.7 * (52.96 / 59.8)
-    y = (33.6 - im_len) / 2
+    
+    # Instead of eliminating cases where they directly intersect the image
+    # we will eliminate cases where their eyes come within 2 degree-visual-angle bounding box around the image
+    
+    #im_len = 6.7 * (52.96 / 59.8)
+    im_len = 6.7 * (52.96 / 59.8) + 2
+    
+    y = (33.6 -im_len) 
+    
     x1 = (59.8 / 2) - 4.5 - im_len
     x2 = (59.8 / 2) + 4.5
 
