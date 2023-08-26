@@ -195,7 +195,7 @@ def parse_gaze_data(datadir):
 def intersect_image(xs, ys):
     
     # Instead of eliminating cases where they directly intersect the image
-    # we will eliminate cases where their eyes come within 2 degree-visual-angle bounding box around the image
+    # we will eliminate cases where their eyes come within 1 degree-visual-angle bounding box around the image (add 1 degree to both horizontal image edges and both vertical image edges)
     
     #im_len = 6.7 * (52.96 / 59.8)
     im_len = 6.7 * (52.96 / 59.8) + 2
