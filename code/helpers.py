@@ -192,11 +192,47 @@ def parse_gaze_data(datadir):
     return pd.concat(data, ignore_index=True)
 
 
+# kz edited three lines in intersect_images
+
 def intersect_image(xs, ys):
-    im_len = 6.7 * (52.96 / 59.8)
+    
+    # kz commented out this line (#1) ###########
+    # im_len = 6.7 * (52.96 / 59.8)
+    ############################################
+    
+    # ^ this line sought to get the length of one side of an image stimulus, in centimeters
+    # I think the conversion factor is flipped -- it should be multiplied by 59.8 cm / 52.96 dva ?
+    
+    # here is the way I see it:
+    
+    # image_length_in_cm  = 6.7 DVA  *  ( 59.8 cm / 52.96 DVA )
+    # the DVA on the top and bottom cancel out, leaving just cm?
+    
+    # kz replaced with this line (edit #1)
+    im_len = 6.7 * (59.8  / 52.96) + 2
+   
+    # NOTE: I also add an additional 2 centimeters 
+    # BECAUSE: I want to detect any gazepoints within a bounding box of 1cm around the image 
+    # thus, I add two centimeters, one for each side 
+    # (e.g. the horizontal length is the original length plus 1 cm on the left and 1 cm on the right)
+    # also see visualization in jupyter notebook
+    
+    ############################################
+    
     y = (33.6 - im_len) / 2
-    x1 = (59.8 / 2) - 4.5 - im_len
-    x2 = (59.8 / 2) + 4.5
+    # ^ this line remains unchanged
+    
+    # kz commented out these lines (#2, #3)
+    # x1 = (59.8 / 2) - 4.5 - im_len
+    # x2 = (59.8 / 2) + 4.5
+    
+    # kz replaced with these lines (edits #2, #3)
+    x1 = (59.8 / 2) - 3.5 - im_len
+    x2 = (59.8 / 2) + 3.5
+    
+    # ^ in these lines, I now subtract 3.5 as opposed to 4.5
+    # since we are adding a 1cm bounding box around the image, the edge is now 1 cm closer to center
+    # thus the nearest edge we want to detect is 3.5 as opposed to 4.5 centimeters away
 
     xs = np.array(xs)
     ys = np.array(ys)
@@ -382,6 +418,7 @@ def add_cue_recency_info(df):
         df.loc[i, 'Distance to nearest same-category cue'], df.loc[i, 'Number of same-category cues'], df.loc[i, 'Recency-weighted number of same-category cues'] = nearest_cues(row, df)
     return df
 
+# kz edited two lines in load_data
 
 def load_data():
     download_data()
@@ -423,10 +460,15 @@ def load_data():
 
     sustained_behavioral = add_cue_recency_info(sustained_behavioral)
     variable_behavioral = add_cue_recency_info(variable_behavioral)
-
-
-    sustained = sustained_behavioral[~sustained_behavioral['Attended intersection']]
-    variable = variable_behavioral[~variable_behavioral['Attended intersection']]
+    
+    # kz commented out these lines
+    # sustained = sustained_behavioral[~sustained_behavioral['Attended intersection']]
+    # variable = variable_behavioral[~variable_behavioral['Attended intersection']]
+    
+    # kz added these lines
+    sustained = sustained_behavioral[~sustained_behavioral['Intersection detected']]
+    variable = variable_behavioral[~variable_behavioral['Intersection detected']]
+    # remove trials where any intersection happened within the bounding box for either image
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
