@@ -240,12 +240,9 @@ def intersect_image(xs, ys):
     return ((xs > x1) & (xs < x1 + im_len) & (ys > y) & (ys < y + im_len)).any(), ((xs > x2) & (xs < x2 + im_len) & (ys > y) & (ys < y + im_len)).any()
 
 
-#kz added two lines to this function
+#kz added five lines to this function
 
 def add_intersection(behavioral, gaze):
-    
-    # kz added line below: create column in df to store # of gaze datapoints per trial
-    behavioral['unique_gaze_datapoints'] = np.nan
     
     subjs = behavioral['Subject'].unique()
     for subj in tqdm(subjs):
@@ -259,8 +256,14 @@ def add_intersection(behavioral, gaze):
                 behavioral.loc[i, 'Intersection detected'] = behavioral.loc[i, 'Left intersection'] or behavioral.loc[i, 'Right intersection']
                 behavioral.loc[i, 'Attended intersection'] = (behavioral.loc[i, 'Left intersection'] and behavioral.loc[i, 'Cued Location'] == '<') or (behavioral.loc[i, 'Right intersection'] and behavioral.loc[i, 'Cued Location'] == '>')
     
-            # kz added line below: store number of gazepoints in this trial to datadframe before returning 
-            behavioral.loc[i, 'unqieu_gaze_datapoints']  = gz.shape[0]
+            # kz added five lines below: store number of gazepoints in this trial to datadframe before returning 
+            behavioral.loc[i, 'gaze_datapoints']  = gz.shape[0]
+            behavioral.loc[i, 'unique_gaze_datapoints']  = gz.drop_duplicates().shape[0]
+            
+            gz_dropped = gz.drop_duplicates()
+            behavioral.loc[i, 'first_second'] = gz_dropped.query('Time >= @start and Time <= @start + 1')
+            behavioral.loc[i, 'second_second'] = gz_dropped.query('Time >= @start + 1 and Time <= @start + 2')
+            behavioral.loc[i, 'third_second'] = gz_dropped.query('Time >= @start + 2 and Time <= @start + 3')
             
     return behavioral
 
